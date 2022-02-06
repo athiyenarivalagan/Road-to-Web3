@@ -19,9 +19,16 @@
     "express-static": "^1.2.6",
     "save": "^2.4.0"
   },
+  "keywords": [
+    "example",
+    "heroku"
+],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/athiyenarivalagan/Road-to-Web3.git"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "bugs": {
     "url": "https://github.com/athiyenarivalagan/Road-to-Web3/issues"
