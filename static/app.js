@@ -43,6 +43,7 @@ function submit(event) {
 	if (existingCards !== null) {
 		existingCards.innerHTML = ''
 	}
+	document.getElementById('loadSpinner').style.display = 'block'
 	//Fetching NFT data of main component
 	getNFTMetaData(contractAddress, tokenID, chainID)
 		.then(res => {
@@ -54,6 +55,7 @@ function submit(event) {
 			document.getElementById('fetchedOriginalOwner').innerHTML = res.data.items[0].nft_data[0].original_owner
 			fetchedNFT.style.display = 'block'
 			console.log(res.data)
+			document.getElementById('loadSpinner').style.display = 'none'
 			return nftOwnerAddress
 			//Gets additional NFT info of owner
 		})
@@ -106,6 +108,7 @@ function submit(event) {
 						}
 					})
 
+
 				})
 				.catch(err => console.log(err))
 		})
@@ -127,21 +130,43 @@ async function getNFTData() {
 		'https://api.covalenthq.com/v1/43114/nft_market/?key=ckey_53d9f55e830446a3b8cedcd9ab9',
 		'https://api.covalenthq.com/v1/137/nft_market/?key=ckey_53d9f55e830446a3b8cedcd9ab9'
 	]
-	for (let i = 0; i < endPoints.length; i++) {
-		try {
-			const res = await axios.get(endPoints[i])
-			nftGlobalData.push(res.data)
+
+	const res1 = axios.get(endPoints[0])
+	const res2 = axios.get(endPoints[1])
+	const res3 = axios.get(endPoints[2])
+	Promise.all([res1, res2, res3])
+		.then(values => {
+			// console.log(values)
+			// nftGlobalData = values
+			// console.log("nftGlobalData",nftGlobalData)
+			values.map(item => {
+				nftGlobalData.push(item.data)
+			})
 			if (nftGlobalData.length === 3) {
 				document.getElementById('loadSpinner').style.display = 'none'
 				document.getElementById('loadtext').style.display = 'none'
 				search.disabled = false;
 			}
-		} catch (err) {
-			console.error(err)
-		}
-	}
+			console.log("nftGlobalData",nftGlobalData)
+		})
+		.catch(err => console.log(err))
 
-	console.log(nftGlobalData)
+
+	// for (let i = 0; i < endPoints.length; i++) {
+	// 	try {
+	// 		const res = await axios.get(endPoints[i])
+	// 		nftGlobalData.push(res.data)
+	// 		if (nftGlobalData.length === 3) {
+	// 			document.getElementById('loadSpinner').style.display = 'none'
+	// 			document.getElementById('loadtext').style.display = 'none'
+	// 			search.disabled = false;
+	// 		}
+	// 	} catch (err) {
+	// 		console.error(err)
+	// 	}
+	// }
+
+	// console.log(nftGlobalData)
 }
 
 
